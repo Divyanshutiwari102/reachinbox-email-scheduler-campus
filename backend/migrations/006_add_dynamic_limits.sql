@@ -1,0 +1,2 @@
+ALTER TABLE emails ADD COLUMN delay_ms INTEGER;
+ALTER TABLE emails ADD COLUMN hourly_limit INTEGER;
