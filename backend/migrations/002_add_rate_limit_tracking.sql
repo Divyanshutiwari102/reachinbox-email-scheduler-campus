@@ -1,0 +1,1 @@
+ALTER TABLE emails ADD COLUMN rate_limited_count INTEGER NOT NULL DEFAULT 0;
