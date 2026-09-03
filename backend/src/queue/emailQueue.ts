@@ -9,6 +9,7 @@ const redisConnection = new IORedis({
   host: process.env.REDIS_HOST,
   port: Number(process.env.REDIS_PORT),
   password: process.env.REDIS_PASSWORD || undefined, // ioredis treats empty string as password, so we use undefined if empty
+  tls: {},
   // Optional: you can add retry strategies, etc.
 });
 
