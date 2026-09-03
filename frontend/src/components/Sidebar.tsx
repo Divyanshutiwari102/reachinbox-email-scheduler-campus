@@ -48,7 +48,7 @@ export default function Sidebar({ session, pathname, counts, loading, fetchCount
   if (loading) {
     // Show skeleton counts while loading
     return (
-      <>
+      <aside className="w-64 flex-shrink-0 h-screen sticky top-0 flex flex-col border-r border-gray-200 bg-white overflow-y-auto">
         <div className="p-4">
           <h1 className="text-xl font-bold tracking-tight">RIS</h1>
         </div>
@@ -81,9 +81,9 @@ export default function Sidebar({ session, pathname, counts, loading, fetchCount
         <nav className="flex-1 overflow-y-auto">
           <Link
             href="/dashboard/compose"
-            className={`flex w-full items-center px-4 py-2 mt-4 rounded-lg border border-emerald-600 text-emerald-600 hover:bg-emerald-50`}
+            className="flex items-center justify-center px-4 py-2 mt-4 mx-4 rounded-lg border border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-medium transition-colors"
           >
-            <span className="mr-2 h-4 w-4">▼</span>
+            Compose
             Compose
           </Link>
           <Link
@@ -127,12 +127,12 @@ export default function Sidebar({ session, pathname, counts, loading, fetchCount
             </span>
           </Link>
         </nav>
-      </>
+      </aside>
     );
   }
 
   return (
-    <>
+    <aside className="w-64 flex-shrink-0 h-screen sticky top-0 flex flex-col border-r border-gray-200 bg-white overflow-y-auto">
       <div className="p-4">
         <h1 className="text-xl font-bold tracking-tight">RIS</h1>
       </div>
@@ -166,8 +166,10 @@ export default function Sidebar({ session, pathname, counts, loading, fetchCount
         <LogOut className="mr-2 h-4 w-4" />
         <span className="sr-only">Logout</span>
       </button>
-      <Link href="/dashboard/compose" className={`flex w-justify items-center px-4 py-2 mt-4 rounded-lg border border-emerald-600 text-emerald-600 hover:bg-emerald-50`}>
-        <span className="mr-2 h-4 w-4">▼</span>
+      <Link
+        href="/dashboard/compose"
+        className="flex items-center justify-center px-4 py-2 mt-4 mx-4 rounded-lg border border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-medium transition-colors"
+      >
         Compose
       </Link>
       <div className="mx-4 my-4">
@@ -205,6 +207,6 @@ export default function Sidebar({ session, pathname, counts, loading, fetchCount
           </span>
         </Link>
       </nav>
-    </>
+    </aside>
   );
 }

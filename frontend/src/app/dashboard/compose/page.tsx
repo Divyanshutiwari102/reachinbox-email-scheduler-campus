@@ -165,10 +165,9 @@ export default function ComposePage() {
               <Clock className="h-4 w-4 text-gray-600 hover:text-gray-800" onClick={handleSendLaterOpen} />
               <button
                 onClick={handleSend}
-                className="flex items-center gap-1 px-3 py-1 bg-gray-50 hover:bg-gray-100 rounded text-sm font-medium"
+                className="flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-full transition-colors"
               >
                 {buttonText}
-                <ChevronDown className="h-3 w-3" />
               </button>
             </div>
           </div>
@@ -235,7 +234,9 @@ export default function ComposePage() {
             </div>
           </div>
 
-          <ComposeToolbar />
+          <div className="mb-4">
+            <ComposeToolbar />
+          </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">Body</label>
@@ -278,7 +279,7 @@ export default function ComposePage() {
             <button
               onClick={handleSend}
               disabled={sending}
-              className="w-full flex justify-center items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              className="w-full flex justify-center items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-full transition-colors disabled:opacity-50"
             >
               {sending ? 'Sending...' : 'Send Email'}
             </button>

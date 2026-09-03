@@ -299,11 +299,24 @@ export default function EmailList({ type }: Props) {
         <div className="space-y-4">
           {filteredEmails.map((email) => {
             return (
-              <Link key={email.id} href={`/dashboard/email/${email.id}`} className="flex space-x-4 items-start">
+              <Link key={email.id} href={`/dashboard/email/${email.id}`} className="flex space-x-4 items-start py-3 border-b border-gray-200 last:border-b-0">
                 <div className="flex-shrink-0">
-                  <p className="font-medium text-gray-900 max-w-[220px] min-w-0 truncate" title={email.recipient}>
-                    To: {email.recipient}
-                  </p>
+                  {type === 'scheduled' ? (
+                    <>
+                      <span className="inline-flex items-center px-2.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {email.formattedTime}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={`inline-flex items-center px-2.5 rounded-full text-xs font-medium ${
+                        email.status === 'sent' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+                      }`}>
+                        {email.status === 'sent' ? 'Sent' : 'Failed'}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <div className="flex-col flex-1 space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
