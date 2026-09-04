@@ -52,10 +52,9 @@ const MAX_EMAILS_PER_HOUR_PER_SENDER = parseInt(process.env.MAX_EMAILS_PER_HOUR_
 import express from 'express';
 import cors from 'cors';
 import pool from './db/pool';
-import { emailQueue } from './queue/emailQueue';
+import { emailQueue, redisConnection } from './queue/emailQueue';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
-import IORedis from 'ioredis';
 import { ensureEmailsIndexExists, esClient } from './services/elasticsearchClient';
 import { indexEmail } from './services/emailIndexer';
 // BullMQ Board imports
@@ -63,13 +62,6 @@ import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import auth, { authEmailOnly } from './middleware/auth';
-
-// Create a Redis connection for temporary OAuth state storage
-const oauthRedis = new IORedis({
-  host: process.env.REDIS_HOST,
-  port: Number(process.env.REDIS_PORT),
-  password: process.env.REDIS_PASSWORD || undefined,
-});
 
 // Load environment variables (already done above)
 
@@ -380,7 +372,7 @@ app.get('/slack/oauth/start', async (req, res) => {
   // Generate a random state token to prevent CSRF
   const stateToken = crypto.randomUUID();
   // Store the state token in Redis with a short TTL (10 minutes) mapping to the senderId
-  await oauthRedis.set(`oauth_state:${stateToken}`, senderId, 'EX', 600); // 600 seconds = 10 minutes
+  await redisConnection.set(`oauth_state:${stateToken}`, senderId, 'EX', 600); // 600 seconds = 10 minutes
 
   // Construct the Slack OAuth URL
   const slackAuthUrl = new URL('https://slack.com/oauth/v2/authorize');
@@ -407,9 +399,9 @@ app.get('/slack/oauth/callback', async (req, res) => {
   }
 
   // Retrieve the senderId from Redis using the state token
-  const senderId = await oauthRedis.get(`oauth_state:${state}`);
+  const senderId = await redisConnection.get(`oauth_state:${state}`);
   // Delete the state token from Redis (one-time use)
-  await oauthRedis.del(`oauth_state:${state}`);
+  await redisConnection.del(`oauth_state:${state}`);
 
   if (!senderId) {
     return res.status(400).json({ error: 'Invalid or expired state parameter' });

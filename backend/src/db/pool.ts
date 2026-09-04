@@ -12,6 +12,8 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
   ssl: { rejectUnauthorized: false },
+  max: 10,
+  idleTimeoutMillis: 30000,
 });
 
 // Test the connection (optional but good for debugging)
