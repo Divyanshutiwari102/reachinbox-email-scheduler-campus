@@ -305,8 +305,8 @@ app.get('/emails/search', auth, async (req, res) => {
       }
     });
 
-    // Extract the hits and map to the document source
-    const hits = result.hits.hits.map(hit => hit._source);
+    // Extract the hits and map to the document source, include Elasticsearch _id as id
+    const hits = result.hits.hits.map(hit => ({ id: hit._id, ...(hit._source as Record<string, any>) }));
     return res.status(200).json(hits);
   } catch (error) {
     console.error('Elasticsearch search error:', error);
@@ -323,6 +323,11 @@ app.get('/emails/:id', auth, async (req, res) => {
 
   if (!id) {
     return res.status(400).json({ error: 'Missing email id' });
+  }
+
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(id)) {
+    return res.status(400).json({ error: 'Invalid email id' });
   }
 
   try {
