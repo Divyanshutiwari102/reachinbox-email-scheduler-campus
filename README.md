@@ -310,6 +310,4 @@ Create `frontend/.env.local` (copy from the example below) and fill in Google OA
 - **Multi-recipient scheduling:** Sends one `POST /schedule` per recipient (schema stores one recipient per row) rather than a single bulk-insert endpoint.
 - **Worker as a second App Service:** Chosen over a single combined process to mirror a realistic production topology (API and background workers scaled independently); required adding a lightweight HTTP health-check endpoint purely to satisfy Azure App Service's platform health monitoring.
 
-## Demo Video
 
-[Demo video link to be added here]
