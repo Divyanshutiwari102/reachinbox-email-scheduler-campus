@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { resolve } from 'path';
+import http from 'http';
 
 // Load environment variables from backend/.env
 dotenv.config({ path: resolve(__dirname, '../../.env') });
@@ -299,6 +300,15 @@ async function processJob(job: any) {
 
 (async () => {
   await initializeTransporter();
+
+  // Health-check HTTP server for Azure App Service
+  const PORT = process.env.PORT || 8080;
+  http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('worker alive');
+  }).listen(PORT, () => {
+    console.log(`Health-check HTTP server listening on port ${PORT}`);
+  });
 
   // Create the worker
   const worker = new Worker(
